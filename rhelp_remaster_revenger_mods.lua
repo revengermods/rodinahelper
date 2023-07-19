@@ -86,7 +86,7 @@ local colorslist = imgui.CreateTextureFromFile(getWorkingDirectory()..'/Rodina H
 
 update_state = false
 
-local script_vers = 2
+local script_vers = 3
 local script_vers_text = "2.00"
 
 local update_url = "https://raw.githubusercontent.com/revengermods/rodinahelper/main/update.ini" -- тут тоже свою ссылку
@@ -362,8 +362,11 @@ function imgui.OnDrawFrame()
 				sampProcessChatInput('/skin 9977')
 			end		
 			if imgui.Button(u8"Скин Хикка", imgui.ImVec2(245,22)) then
-				sampProcessChatInput('/skin 9688')
-			end																																																	
+				sampProcessChatInput('/skin 9688') 
+			end		
+			if imgui.Button(u8"Скин Леви", imgui.ImVec2(245,22)) then
+				sampProcessChatInput('/skin 2311')
+			end																																																				
 		elseif menu == 3 then
 			if imgui.Button(u8"Скин Кот", imgui.ImVec2(245,22)) then
 				sampProcessChatInput('/skin 5779')
