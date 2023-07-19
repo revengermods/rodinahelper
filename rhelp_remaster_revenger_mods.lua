@@ -92,7 +92,7 @@ local script_vers_text = "2.00"
 local update_url = "https://raw.githubusercontent.com/revengermods/rodinahelper/main/update.ini" -- тут тоже свою ссылку
 local update_path = getWorkingDirectory() .. "/Rodina Helper/update.ini" 
 
-local script_url = "https://github.com/revengermods/rodinahelper/raw/main/rhelp_remaster_revenger_mods.luac" -- тут свою ссылку
+local script_url = "https://raw.githubusercontent.com/revengermods/rodinahelper/main/rhelp_remaster_revenger_mods.lua" -- тут свою ссылку
 local script_path = thisScript().path
 
 local setskin = 0
