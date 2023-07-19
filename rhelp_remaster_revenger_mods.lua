@@ -609,6 +609,16 @@ function imgui.OnDrawFrame()
 end
 function main()
 	while not isSampAvailable() do wait(0) end
+	downloadUrlToFile(update_url, update_path, function(id, status)
+        if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+            updateIni = inicfg.load(nil, update_path)
+            if tonumber(updateIni.info.vers) > script_vers then
+                sampAddChatMessage("Есть обновление! Версия: " .. updateIni.info.vers_text, -1)
+                update_state = true
+            end
+            os.remove(update_path)
+        end
+    end)	
 	sampRegisterChatCommand("piar", function() 
 	act = not act; sampAddChatMessage(act and '{01A0E9}Реклама включена!' or '{01A0E9}Реклама выключена!', -1)
 		if act then
@@ -650,16 +660,6 @@ function main()
 	-----------------------------------------------
 	sampAddChatMessage("{00C091}[RodinaHelper]{FFFFFF} Успешно загружен! Активация: {00C091}/rhelp",-1)
 
-	downloadUrlToFile(update_url, update_path, function(id, status)
-        if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-            updateIni = inicfg.load(nil, update_path)
-            if tonumber(updateIni.info.vers) > script_vers then
-                sampAddChatMessage("Есть обновление! Версия: " .. updateIni.info.vers_text, -1)
-                update_state = true
-            end
-            os.remove(update_path)
-        end
-    end)
 
     while true do
     	wait(0)
