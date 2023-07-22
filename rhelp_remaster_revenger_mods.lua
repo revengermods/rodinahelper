@@ -31,6 +31,7 @@ lock = false,
 jlock = false,
 recar = false,
 fcar = false,
+pdd = false,
 vr = false,
 act = false,
 flood = false,
@@ -50,6 +51,7 @@ keyAdminMenu = " "
 local tlf = imgui.ImBool(mainIni.config.tlf)
 local balloon = imgui.ImBool(mainIni.config.balloon)
 local arm = imgui.ImBool(mainIni.config.arm)
+local pdd = imgui.ImBool(mainIni.config.pdd)
 local msk = imgui.ImBool(mainIni.config.msk)
 local ztimerstatus = imgui.ImBool(mainIni.config.ztimerstatus)
 local time = imgui.ImBool(mainIni.config.time)
@@ -86,8 +88,8 @@ local colorslist = imgui.CreateTextureFromFile(getWorkingDirectory()..'/Rodina H
 
 update_state = false
 
-local script_vers = 2
-local script_vers_text = "2.00"
+local script_vers = 3
+local script_vers_text = "2.01"
 
 local update_url = "https://raw.githubusercontent.com/revengermods/rodinahelper/main/update.ini" -- тут тоже свою ссылку
 local update_path = getWorkingDirectory() .. "/Rodina Helper/update.ini" 
@@ -111,59 +113,62 @@ function imgui.OnDrawFrame()
 			ScreenX, ScreenY = getScreenResolution()ScreenX, ScreenY = getScreenResolution()
 			imgui.SetNextWindowPos(imgui.ImVec2(ScreenX / 2 , ScreenY / 2), imgui.Cond.FirsUseEver, imgui.ImVec2(0.5, 0.5))
 		end
-	  	imgui.Begin('Rodina Helper remaster | v2.0', main_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar)
+	  	imgui.Begin('Rodina Helper remaster | v2.1', main_window_state, imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar)
 	  	imgui.CenterText(u8" ")
 	  	imgui.SetCursorPos(imgui.ImVec2(6, 30))
 	  	imgui.BeginChild("##MainWindow", imgui.ImVec2(350, 350), true, imgui.WindowFlags.NoScrollbar)
-        imgui.Checkbox(u8"Удаление ненужных сообщений из чата", flood)
-        imgui.SameLine()
-				imgui.TextQuestion(u8"Данная функция удалит из чата такие сообщения как:\nпригласите друга, достал телефон и т.д" )
-			  	imgui.Checkbox(u8"Открытье/Закрытие транспорта", lock)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"При нажатии на клавишу L вы закроете/откроете свой транспорт")
-				imgui.Checkbox(u8"Спавн транспорта на клавишу",spawncara)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"При нажатии колесика мыши будет спавнится авто в котором вы сидите (нужно иметь титан випку)")
-				imgui.Checkbox(u8"Заправить авто", fcar)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Активация - ALT + H")
-				imgui.Checkbox(u8"Починка авто",recar)
-		    	imgui.SameLine()
-				imgui.TextQuestion(u8"Активация - ALT + Y")
-				imgui.Checkbox(u8"Принять в фаму", inv)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"При сочитании клавиш Alt + 3 вы приглосите ближайшего игрока в фаму.Если игрок уже состоит в семье то откроеться меню фамы")
-				imgui.Checkbox(u8"Автокликер", balloon)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Активация: ALT + C (зажатие)\nКликер для сборки шара и т.д\n(Перед использованием прочитайте правила своего округа!)")
-				imgui.Checkbox(u8"Аптечка", tlf)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Активация - ALT + 1")
-				imgui.Checkbox(u8"Маска", msk)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Активация - ALT + 4")
-				imgui.SameLine()
-				imgui.Checkbox(u8"Бронежилет", arm)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Активация - ALT + 2")		
-				imgui.Checkbox(u8"Сбив через анимацию",sbiv)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"При нажатии клавиши Q пропишется /anims 125")
-				imgui.Checkbox(u8"Z-Timer", ztimerstatus)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"После выдачи метки Z, начнется отсчёт 600 секунд")
-				imgui.Checkbox(u8"Смена скина", vskin)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Меняет модельку скина и физику\n(92 и 99 лучше не использовать)")
-				imgui.Checkbox(u8"Очистить чат", cleatchat)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Активация - Щ")
-				imgui.Checkbox(u8"Дрифт", drift)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Активация - Shift, Управление - A,D\n(Перед использованием прочитайте правила своего округа!)")		
-				imgui.Checkbox(u8"FishEyeEffect", fovfish)
-				imgui.SameLine()
-				imgui.TextQuestion(u8"Дает больше угол обзора\n(Перед использованием прочитайте правила своего округа!))")
+		  imgui.Checkbox(u8"Удаление ненужных сообщений из чата", flood)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Данная функция удалит из чата такие сообщения как:\nпригласите друга, достал телефон и т.д" )
+		  imgui.Checkbox(u8"Очистить чат", cleatchat)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация - Щ")
+		  -------------------------------------------------------------------------------------------------------------------
+		  imgui.Checkbox(u8"Открытье/Закрытие транспорта", lock)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"При нажатии на клавишу L вы закроете/откроете свой транспорт")
+		  imgui.Checkbox(u8"Спавн транспорта на клавишу",spawncara)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"При нажатии колесика мыши будет спавнится авто в котором вы сидите (нужно иметь титан випку)")
+		  imgui.Checkbox(u8"Дрифт", drift)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация - Shift, Управление - A,D\n(Перед использованием прочитайте правила своего округа!)")						
+		  imgui.Checkbox(u8"Заправить авто", fcar)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация - ALT + H")
+		  imgui.Checkbox(u8"Починка авто",recar)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация - ALT + Y")
+		  -------------------------------------------------------------------------------------------------------------------
+		  imgui.Checkbox(u8"Принять в фаму", inv)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"При сочитании клавиш Alt + 3 вы приглосите ближайшего игрока в фаму.Если игрок уже состоит в семье то откроеться меню фамы")
+		  imgui.Checkbox(u8"Аптечка", tlf)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация - ALT + 1")
+		  imgui.SameLine()
+		  imgui.Checkbox(u8"Бронежилет", arm)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация - ALT + 2")		
+		  imgui.Checkbox(u8"Открытие шлагбаума", pdd)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация - H")					
+		  imgui.Checkbox(u8"Сбив через анимацию",sbiv)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"При нажатии клавиши Q пропишется /anims 125")
+		  imgui.Checkbox(u8"Автокликер", balloon)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Активация: ALT + C (зажатие)\nКликер для сборки шара и т.д\n(Перед использованием прочитайте правила своего округа!)")
+		  -------------------------------------------------------------------------------------------------------------------
+		  imgui.Checkbox(u8"Z-Timer", ztimerstatus)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"После выдачи метки Z, начнется отсчёт 600 секунд")
+		  imgui.Checkbox(u8"Skinchanger", vskin)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Меняет модельку скина и физику\n(92 и 99 лучше не использовать)")
+		  imgui.Checkbox(u8"Fisheyeeffect", fovfish)
+		  imgui.SameLine()
+		  imgui.TextQuestion(u8"Дает больше угол обзора\n(Перед использованием прочитайте правила своего округа!))")			
 	  			imgui.EndChild()
 	  		imgui.SetCursorPos(imgui.ImVec2(10, 385))
 			if imgui.Button(u8'Сохранить настройки',imgui.ImVec2(171,45)) then
@@ -176,7 +181,8 @@ function imgui.OnDrawFrame()
 				mainIni.config.ztimerstatus = ztimerstatus.v
 				mainIni.config.vskin = vskin.v
 				mainIni.config.cleatchat = cleatchat.v
-				mainIni.config.time = time.v
+				mainIni.config.time = time.v 
+				mainIni.config.pdd = pdd.v
 				mainIni.config.spawncara = spawncara.v
 				mainIni.config.lock = lock.v
 				mainIni.config.jlock = jlock.v
@@ -659,6 +665,7 @@ function main()
 	end)
 	-----------------------------------------------
 	sampAddChatMessage("{00C091}[RodinaHelper]{FFFFFF} Успешно загружен! Активация: {00C091}/rhelp",-1)
+	sampAddChatMessage("{00C091}[RodinaHelper]{FFFFFF} Если у вас нет ID цветов, то обратитесь к {00C091}[vk.com/qweeqwz]", -1)
 
 
     while true do
@@ -705,7 +712,12 @@ function main()
 			if isKeyDown(VK_MENU) and isKeyJustPressed(VK_H) then
 				sampSendChat("/fillcar")
 			end
-		end					
+		end
+		if pdd.v and not sampIsCursorActive() then
+			if isKeyJustPressed(VK_H) then
+				sampSendChat("/open")
+			end
+		end								
 		if drift.v then
 			if isCharInAnyCar(playerPed) then 
 					local car = storeCarCharIsInNoSave(playerPed)
